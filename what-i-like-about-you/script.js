@@ -14,6 +14,7 @@ const displayMessages = [
 
 const state = {
   remaining: [],
+  rareRemaining: [],
   count: Number(localStorage.getItem("like-machine-count") || 0),
   busy: false
 };
@@ -36,6 +37,7 @@ const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 dispensedCount.textContent = state.count;
 refillBag();
+refillRareBag();
 
 function shuffle(items) {
   const a = [...items];
@@ -49,6 +51,9 @@ function shuffle(items) {
 function refillBag() {
   state.remaining = shuffle(compliments);
 }
+function refillRareBag() {
+  state.rareRemaining = shuffle(rareCompliments);
+}
 
 function randomOf(items) {
   return items[Math.floor(Math.random() * items.length)];
@@ -56,7 +61,7 @@ function randomOf(items) {
 
 function maybeRare() {
   // About a 1 in 7 chance. Rare pulls do not affect the no-repeat rotation.
-  return rareCompliments.length > 0 && Math.random() < 1 / 7;
+  return rareCompliments.length > 0 && Math.random() < 1 / 8;
 }
 
 function centerOf(element) {
@@ -223,7 +228,8 @@ function vend() {
   if (!card.hidden) card.hidden = true;
   let text;
   if (isRare) {
-    text = randomOf(rareCompliments);
+    if (!state.rareRemaining.length) refillRareBag();
+    text = state.rareRemaining.pop();
   } else {
     if (!state.remaining.length) refillBag();
     text = state.remaining.pop();
@@ -245,6 +251,7 @@ function vend() {
 
 function resetRotation() {
   refillBag();
+  refillRareBag();
   displayText.textContent = "refilled with good things ♡";
   resetButton.animate(
     [{ transform: "rotate(0deg)" }, { transform: "rotate(360deg)" }],
