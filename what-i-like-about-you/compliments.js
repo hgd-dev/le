@@ -39,8 +39,8 @@ window.LE_COMPLIMENTS = [
 
 // Rare / golden cards (~1 in 11 pulls)
 window.LE_RARE_COMPLIMENTS = [
-  "LEGENDARY PULL: I don't just like you; I genuinely feel lucky and blissful that I get to be with you. ♡",
-  "LEGENDARY PULL: I love you three thousand!....and one 🥹🥹🥹.",
-  "LEGENDARY PULL: I like how you make me thir-…-tyfold happier every day I see you ;).",
+  "✨I don't just like you; I genuinely feel lucky and blissful that I get to be with you. ♡✨",
+  "✨I love you three thousand!....and one 🥹🥹🥹.✨",
+  "✨I like how you make me thir-…-tyfold happier every day I see you ;).✨",
 ];
 
