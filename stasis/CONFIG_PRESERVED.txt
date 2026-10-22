@@ -1,0 +1,2 @@
+config.js is intentionally not included in this patch.
+Keep the config.js already deployed in your existing Stasis folder.

@@ -1,8 +1,10 @@
-const CACHE = "stasis-shell-v1-final";
+const CACHE = "stasis-shell-v1.2-arcade";
 const SHELL = [
   "./",
   "./index.html",
   "./style.css",
+  "./games.css",
+  "./games.js",
   "./app.js",
   "./config.js",
   "./manifest.webmanifest",

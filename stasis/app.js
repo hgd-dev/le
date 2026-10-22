@@ -175,7 +175,7 @@
   function route() {
     const hash = location.hash || "#/dashboard";
     const parts = hash.replace(/^#\/?/, "").split("/").filter(Boolean);
-    return { name: parts[0] || "dashboard", id: parts[1] || null };
+    return { name: parts[0] || "dashboard", id: parts[1] || null, sub: parts[2] || null, item: parts[3] || null, parts };
   }
 
   function navigate(path) {
@@ -189,6 +189,7 @@
   }
 
   function stopRoomSubscription() {
+    window.StasisGames?.stop?.();
     if (state.currentSubscription && state.client) {
       state.client.removeChannel(state.currentSubscription);
       state.currentSubscription = null;
@@ -471,7 +472,7 @@
             </div>
             <div class="global-custom" id="globalCustomFields" data-status-value="${e(globalSeed.custom_status || "")}" data-mood-value="${e(globalSeed.custom_mood || "")}"></div>
             <div class="global-room-list">${rooms.map(room => `<label class="room-check"><input type="checkbox" name="globalRoom" value="${e(room.id)}" checked /><span>${e(room.icon || "♡")} ${e(room.name)}</span></label>`).join("")}</div>
-            <div class="global-bottom"><div class="field compact"><label>until</label><input id="globalUntil" type="datetime-local" value="${e(toLocalInput(globalSeed.until_at))}" /></div><label class="check-item"><input type="checkbox" id="globalIncludeNote" /> include note</label><input id="globalNote" maxlength="280" placeholder="optional little note" disabled /><button class="btn primary" type="submit">update selected rooms</button></div>
+            <div class="global-bottom"><div class="field compact"><label>until</label><input id="globalUntil" type="datetime-local" value="${e(toLocalInput(globalSeed.until_at))}" /></div><label class="check-item"><input type="checkbox" id="globalIncludeNote" /> include note</label><input id="globalNote" maxlength="1500" placeholder="optional little note" disabled /><button class="btn primary" type="submit">update selected rooms</button></div>
           </form>
         </section>` : ""}
 
@@ -790,8 +791,8 @@
             </div>
             <div class="field">
               <label>little note</label>
-              <textarea data-card-field="note" maxlength="280" placeholder="leave a tiny note…">${e(card.note || "")}</textarea>
-              <span class="hint-text"><span id="noteCount">${(card.note || "").length}</span>/280 · saves automatically</span>
+              <textarea data-card-field="note" maxlength="1500" placeholder="leave a tiny note…">${e(card.note || "")}</textarea>
+              <span class="hint-text"><span id="noteCount">${(card.note || "").length}</span>/1500 · saves automatically</span>
             </div>
           </div>
           <div class="card-foot">
@@ -830,6 +831,8 @@
     const { room, members, isOwner, isManager } = state.currentRoom;
     const myMember = members.find(member => member.user_id === state.user.id);
     const displayMembers = [...members].sort((a,b) => (a.user_id === state.user.id ? -1 : b.user_id === state.user.id ? 1 : a.card_order - b.card_order));
+    const currentRoute = route();
+    const gamesActive = currentRoute.sub === "games";
     return `
       ${topbarHTML()}
       <main class="page room-page accent-${e(room.accent || "rose")}">
@@ -850,6 +853,12 @@
           </div>
         </section>
 
+        <nav class="room-tabs" aria-label="Room sections">
+          <a class="room-tab ${gamesActive ? "" : "active"}" href="#/room/${e(room.id)}">status</a>
+          <a class="room-tab ${gamesActive ? "active" : ""}" href="#/room/${e(room.id)}/games">games</a>
+        </nav>
+
+        ${gamesActive ? `<section id="stasisGameMount"><div class="panel arcade-empty">opening the arcade…</div></section>` : `
         <section class="cards-grid">${displayMembers.map(member => statusCardHTML(member, room)).join("")}</section>
 
         <details class="panel room-tools">
@@ -864,7 +873,7 @@
             ${isOwner ? `<div class="tool-row"><div class="copy"><strong>delete room</strong><span>Permanent for everyone in this room.</span></div><button id="deleteRoom" class="btn danger" type="button">delete room</button></div>` : ""}
             <div class="hint-text">your role: ${e(myMember?.role || "member")}</div>
           </div>
-        </details>
+        </details>`}
       </main>`;
   }
 
@@ -878,6 +887,19 @@
       wireTopbar();
       wireRoom();
       subscribeRoom(roomId);
+      const currentRoute = route();
+      if (currentRoute.sub === "games" && window.StasisGames) {
+        await window.StasisGames.mount({
+          mount: document.getElementById("stasisGameMount"),
+          client: state.client,
+          user: state.user,
+          profileName: state.profile?.display_name,
+          roomContext: state.currentRoom,
+          gameId: currentRoute.item,
+          navigate,
+          toast
+        });
+      }
     } catch (error) {
       renderFatal(error, "Couldn’t open this room.");
     }
@@ -914,6 +936,12 @@
         app.innerHTML = renderRoomHTML();
         wireTopbar();
         wireRoom();
+        if (current.sub === "games" && window.StasisGames) {
+          await window.StasisGames.mount({
+            mount: document.getElementById("stasisGameMount"), client: state.client, user: state.user,
+            profileName: state.profile?.display_name, roomContext: state.currentRoom, gameId: current.item, navigate, toast
+          });
+        }
       } catch (error) {
         toast(error.message || "Room changed.", "error");
       }
