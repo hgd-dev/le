@@ -447,7 +447,7 @@
           </div>
         </section>
 
-        <section class="panel circadia-callout"><div><span class="eyebrow">private health companion</span><h2>CIRCADIA ◉</h2><p>Cycle insights, symptom patterns, and an opt-in partner view. No Stasis room automatically shares health data.</p></div><a href="./circadia/" class="btn primary">open CIRCADIA →</a></section>
+        <section class="panel circadia-callout"><div><span class="eyebrow">a little extra love</span><h2>CIRCADIA ◉</h2><p>Track cycles, discover patterns, and explore them together.</p></div><a href="./circadia/" class="btn primary">open CIRCADIA →</a></section>
 
         <section class="panel action-panel">
           <div class="action-box">
