@@ -1,4 +1,4 @@
-const CACHE = "stasis-shell-v1.2-arcade";
+const CACHE = "stasis-shell-v1.3-circadia";
 const SHELL = [
   "./",
   "./index.html",
@@ -29,6 +29,8 @@ self.addEventListener("fetch", event => {
   if (request.method !== "GET") return;
   const url = new URL(request.url);
   if (url.origin !== location.origin) return;
+  // Never fall back to the Stasis shell for a CIRCADIA subpage.
+  if (url.pathname.includes("/circadia/")) return;
 
   // Network-first for pages/code so deployments update quickly; cached shell is
   // the fallback when the device has no connection.

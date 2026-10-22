@@ -554,3 +554,6 @@ html[data-theme="dark"] .pwa-card { background: linear-gradient(135deg, rgba(99,
 @media (max-width: 430px) { .top-home { display:none; } }
 .room-tile .tile-actions { flex-wrap: wrap; justify-content: flex-start; }
 .room-tile .tile-actions .open-room { margin-right: auto; }
+
+/* CIRCADIA integration */
+.circadia-callout{display:flex;align-items:center;justify-content:space-between;gap:20px;background:linear-gradient(115deg,var(--panel,#fff),rgba(209,170,231,.16))} .circadia-callout p{max-width:600px}.circadia-callout .btn{white-space:nowrap}@media(max-width:600px){.circadia-callout{flex-direction:column;align-items:stretch}}

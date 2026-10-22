@@ -373,6 +373,7 @@
           <span class="brand-copy"><strong>stasis</strong><span>little status rooms</span></span>
         </a>
         <div class="top-actions">
+          <a class="icon-button circadia-top-link" href="./circadia/" title="CIRCADIA cycle intelligence" aria-label="Open CIRCADIA">◉</a>
           <span class="connection-pill ${state.online ? "online" : "offline"}">${state.online ? "live" : "offline"}</span>
           <a class="icon-button top-home" href="../" aria-label="Back to le">le ♡</a>
           <button id="settingsButton" class="icon-button" type="button">settings</button>
@@ -445,6 +446,8 @@
             <span class="hero-name">${e(name)}</span>
           </div>
         </section>
+
+        <section class="panel circadia-callout"><div><span class="eyebrow">private health companion</span><h2>CIRCADIA ◉</h2><p>Cycle insights, symptom patterns, and an opt-in partner view. No Stasis room automatically shares health data.</p></div><a href="./circadia/" class="btn primary">open CIRCADIA →</a></section>
 
         <section class="panel action-panel">
           <div class="action-box">
